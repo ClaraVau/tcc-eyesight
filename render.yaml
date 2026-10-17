@@ -1,0 +1,40 @@
+# Blueprint do Render: um único serviço entrega o site (frontend/dist) e a API.
+# No Render: New → Blueprint → escolha o repositório. Depois preencha as variáveis marcadas como "sync: false".
+services:
+  - type: web
+    name: eyesight
+    runtime: node
+    plan: free
+    buildCommand: cd frontend && npm ci && npm run build && cd ../backend && npm ci && npx prisma generate
+    startCommand: cd backend && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      # Banco (Supabase/PostgreSQL)
+      - { key: DATABASE_URL, sync: false }
+      - { key: DIRECT_URL, sync: false }
+      # Login (Supabase) e sessão
+      - { key: SUPABASE_URL, sync: false }
+      - { key: SUPABASE_ANON_KEY, sync: false }
+      - { key: JWT_SECRET, sync: false }
+      # Endereço público do serviço (o mesmo para site e API), ex.: https://eyesight.onrender.com
+      - { key: FRONTEND_URL, sync: false }
+      - { key: BACKEND_URL, sync: false }
+      # Opcionais: ligam cada recurso quando preenchidos
+      - { key: META_APP_ID, sync: false }
+      - { key: META_APP_SECRET, sync: false }
+      - { key: META_REDIRECT_URI, sync: false }
+      - { key: GOOGLE_CLIENT_ID, sync: false }
+      - { key: GOOGLE_CLIENT_SECRET, sync: false }
+      - { key: GOOGLE_REDIRECT_URI, sync: false }
+      - { key: GOOGLE_DEVELOPER_TOKEN, sync: false }
+      - { key: OPENAI_API_KEY, sync: false }
+      - { key: RESEND_API_KEY, sync: false }
+      - { key: EMAIL_FROM, sync: false }
+      - { key: JOBS_SECRET, sync: false }
+      - { key: UNSUBSCRIBE_SECRET, sync: false }
+      - { key: TOKEN_ENCRYPTION_KEY, sync: false }
+      # NÃO defina VITE_API_URL: sem ela o site chama a API no mesmo endereço.
