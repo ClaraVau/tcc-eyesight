@@ -5,9 +5,9 @@ services:
     name: eyesight
     runtime: node
     plan: free
-    buildCommand: cd frontend && npm ci && npm run build && cd ../backend && npm ci && npx prisma generate
+    buildCommand: cd frontend && npm ci && npm run build && cd ../backend && npm ci && DATABASE_URL=postgresql://x DIRECT_URL=postgresql://x npx prisma generate
     startCommand: cd backend && npm start
-    healthCheckPath: /health
+    healthCheckPath: /
     envVars:
       - key: NODE_VERSION
         value: 22
