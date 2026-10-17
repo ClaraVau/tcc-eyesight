@@ -55,7 +55,8 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 async function start() {
-  await testConnection();
+  if (env.databaseUrl) await testConnection();
+  else console.warn('[DATABASE] DATABASE_URL não definida: iniciando sem banco. O site e a demonstração funcionam; login, cadastro e métricas reais não.');
   app.listen(env.app.port, () => {
     console.log(`\n[SERVER] ✅ Rodando em http://localhost:${env.app.port} [${env.app.nodeEnv}]`);
     console.log('[SERVER]    POST   /auth/cadastro');
